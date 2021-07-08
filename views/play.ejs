@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quize</title>
+    <link rel="stylesheet" href="/css/playgame/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"/>
+</head>
+<body>
+    <!-- start Quiz button -->
+    <div class="start_btn" id="start"><button>Bắt đầu chơi</button></div>
+
+    <!-- Info Box -->
+    <div class="info_box">
+        <div class="info-title"><span>Quy luật:</span></div>
+        <div class="info-list">
+            <div class="info">1. Bạn sẽ có <span>vài giây</span> để trả lời, mỗi câu hỏi số giây sẽ khác nhau.</div>
+            <div class="info">2. Hãy chọn đáp án <span>đúng nhất</span> và nhấn submit để trả lời.</div>
+            <div class="info">3. Bạn sẽ <span>không được</span> chọn đáp án khi hết thời gian.</div>
+            <div class="info">4. Hệ thống sẽ tính điểm mỗi câu hỏi dựa trên <span>thời điểm</span> bạn trả lời.</div>
+            <div class="info">5. <span>Tổng điểm</span> của các câu hỏi là kết quả cuối cùng.</div>
+        </div>
+        <div class="buttons">
+            <button class="quit">Thoát</button>
+            <button class="restart">Tiếp tục</button>
+        </div>
+    </div>
+
+    <!-- Quiz Box -->
+    <div class="quiz_box">
+        <header>
+            <div class="title">Mã phòng:  </div>
+            <div class="timer">
+                <div class="time_left_txt">Thời gian:</div>
+                <div class="timer_sec">00</div>
+            </div>
+            <div class="time_line"></div>
+        </header>
+        <section>
+            <div class="que_text">
+                <!-- Here I've inserted question from JavaScript -->
+            </div>
+            <div class="option_list">
+                <!-- Here I've inserted options from JavaScript -->
+            </div>
+        </section>
+
+        <!-- footer of Quiz Box -->
+        <footer>
+            <div class="total_que">
+                <!-- Here I've inserted Question Count Number from JavaScript -->
+            </div>
+            <button class="next_btn">Tiếp theo</button>
+        </footer>
+    </div>
+
+    <!-- Result Box -->
+    <div class="result_box">
+        <div class="icon">
+            <i class="fas fa-crown"></i>
+        </div>
+        <div class="complete_text">Chúc mừng bạn đã hoàn thành!</div>
+        <div class="score_text">
+            <!-- Here I've inserted Score Result from JavaScript -->
+        </div>
+        <div class="buttons">
+            <button class="quit">Thoát</button>
+        </div>
+    </div>
+
+    <!-- Waiting Box -->
+    <div class="demo" id="spinner" style="display: none">
+        <div class="demo__colored-blocks">
+          <div class="demo__colored-blocks-rotater">
+            <div class="demo__colored-block"></div>
+            <div class="demo__colored-block"></div>
+            <div class="demo__colored-block"></div>
+          </div>
+          <div class="demo__colored-blocks-inner"></div>
+          <div class="demo__text">Ready</div>
+        </div>
+        <div class="demo__inner">
+          <svg class="demo__numbers" viewBox="0 0 100 100">
+            <defs>
+              <path class="demo__num-path-1" d="M40,28 55,22 55,78"/>
+              <path class="demo__num-join-1-2" d="M55,78 55,83 a17,17 0 1,0 34,0 a20,10 0 0,0 -20,-10"/>
+              <path class="demo__num-path-2" d="M69,73 l-35,0 l30,-30 a16,16 0 0,0 -22.6,-22.6 l-7,7"/>
+              <path class="demo__num-join-2-3" d="M28,69 Q25,44 34.4,27.4"/>
+              <path class="demo__num-path-3" d="M30,20 60,20 40,50 a18,15 0 1,1 -12,19"/>
+            </defs>
+            <path class="demo__numbers-path" 
+                  d="M-10,20 60,20 40,50 a18,15 0 1,1 -12,19 
+                     Q25,44 34.4,27.4
+                     l7,-7 a16,16 0 0,1 22.6,22.6 l-30,30 l35,0 L69,73 
+                     a20,10 0 0,1 20,10 a17,17 0 0,1 -34,0 L55,83 
+                     l0,-61 L40,28" />
+          </svg>
+        </div>
+    </div>
+
+    <div class="info_box activeInfo" style="display: none;">
+        <div class="box box-orange box-large box-example-horizontal">
+            <div class="box-header">Horizontal Rating</div>
+            <div class="box-body"> <select id="example-horizontal" name="rating" autocomplete="off">
+                    <option value="10">10</option>
+                    <option value="9">9</option>
+                    <option value="8">8</option>
+                    <option value="7">7</option>
+                    <option value="6">6</option>
+                    <option value="5">5</option>
+                    <option value="4">4</option>
+                    <option value="3">3</option>
+                    <option value="2">2</option>
+                    <option value="1" selected="selected">1</option>
+                </select> </div>
+        </div>
+    </div>
+
+    <script src="/js/jquery.min.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        var setq_pin = "<%= pin %>";
+    </script>
+    <!-- Rating -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-bar-rating/1.2.2/jquery.barrating.min.js"></script>
+    <!-- Inside this JavaScript file I've coded all Quiz Codes -->
+    <script src="/js/playgame/script.js"></script>
+
+    
+</body>
+</html>

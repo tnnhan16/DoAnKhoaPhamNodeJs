@@ -1,0 +1,723 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>
+    CQUIZE - <%- title %>
+  </title>
+  <%- include('partials/css') -%>
+  <style>
+    /*css image*/
+    .setq_image_pic {
+        max-width: 165px;
+        max-height: 165px;
+        display: block;
+        padding: 5px;
+    }
+
+    .file-upload {
+        display: none;
+    }
+
+    .border-image {
+        overflow: hidden;
+        width: 175px;
+        height: 175px;
+        border: 1px solid gray;
+        border-radius: 10px;
+        margin-left: 70px;
+        text-align: -webkit-center;
+    }
+
+    img {
+        max-width: 100%;
+        height: auto;
+    }
+
+    .p-image {
+        color: #666666;
+        transition: all .3s cubic-bezier(.175, .885, .32, 1.275);
+        width: 175px;
+        margin-left: 70px;
+        margin-top: 5px;
+        text-align: -webkit-center;
+    }
+
+    .p-image:hover {
+        transition: all .3s cubic-bezier(.175, .885, .32, 1.275);
+    }
+
+    .upload-button {
+        font-size: 1.2em;
+    }
+
+    .upload-button:hover {
+        transition: all .3s cubic-bezier(.175, .885, .32, 1.275);
+        color: #999;
+    }
+
+    /* Display hidden */
+    .display-hidden {
+      display: none;
+    }
+
+    /* Question image */
+    
+    .question-border-image {
+        overflow: hidden;
+        width: 175px;
+        height: 175px;
+        border: 1px solid gray;
+        border-style: dashed;
+        border-radius: 10px;
+        text-align: -webkit-center;
+    }
+
+    .question-file-upload {
+        display: none;
+    }
+
+    .question-profile-pic {
+        max-width: 165px;
+        max-height: 165px;
+        display: block;
+        padding: 5px;
+    }
+
+    /* Question item */
+    .question-slide {
+      box-shadow: 0 1px 4px 0 rgb(0 0 0 / 14%);
+      background-color: white;
+    }
+
+    .question-item {
+      background-color: rgb(234, 244, 252);
+      cursor: pointer;
+    }
+
+    .question-content {
+      padding-left: 10px;
+    }
+
+    /* Create question */
+    [contentEditable=true]:empty:not(:focus):before{
+        content:attr(data-text)
+    }
+
+    /* Display message */
+    .display-message {
+      display: inline;
+    }
+  </style>
+</head>
+<body>
+    <div class="wrapper">
+      <div class="main-panel" style="float: unset; width: unset;">
+        <%- include('partials/header') -%>
+        <%- include('partials/breadcrumb') -%>
+        <div class="content" style="margin-top: 0px;">
+          <div>
+            <a class="btn btn-default float-right" href="/setq">Thoát</a>
+          </div>
+          <div class="row">
+            <div class="col-4 card">
+              <div class="card-header">
+                <div style="display: flex; justify-content: space-between;">
+                  <input id="setq_id" type="hidden" value="<%- data._id %>" />
+                  <h4 style="padding: 15px;"><%- data.setq_title %></h4><button class="btn btn-info float-left setqUpdate" data-toggle="modal" data-target="#setqUpdateModal">Thông tin bộ câu hỏi</button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row question-content">
+            <div class="col-3 question-slide">
+              <% allQuestion.forEach(function(item, index){ %>
+              <div class="card question-item" style="background-color: rgb(234, 244, 252);">
+                <div class="card-header card-header-primary">
+                  Câu hỏi <%- (index + 1) %>
+                </div>
+                <div class="card-body">
+                  <input type="hidden" id="question_id" value="<%- item._id %>">
+                  <div>
+                    <%- item.question_title %>
+                  </div>
+                  <div class="text-center">
+                    <button type="button" class="btn btn-success btnEditQuestion">Sửa</button>
+                    <button type="button" class="btn btn-danger btnDeleteQuestion">Xóa</button>
+                  </div>
+                </div>
+              </div>
+              <% }) %>
+            </div>
+            <div class="col-9">
+              <input type="hidden" id="question_id_selected">
+              <div style="width: 100%; background-color:rgb(255, 255, 255);">
+                <div class="question_title" contentEditable=true data-text="Nhập câu hỏi" style="padding: clamp(0.5rem, 1.2vmin, 1rem) 2rem; text-align: center;"></div>
+              </div>
+              <span  class="error invalid-feedback question_title_message display-hidden">Xin nhập câu hỏi</span>
+              <div style="padding-top: 10px; text-align: -webkit-center;">
+                <div class="question-border-image">
+                  <!-- Profile Image -->
+                  <img class="question-profile-pic" src="" />
+                  <!-- Default Image -->
+                  <i class="fa fa-image fa-5x" id="question_default_image" style="margin-top: 30px; font-size: 100px;"></i>
+                </div>
+                <input type="file" class="question-file-upload" name="question_image_temp" id="question_image_temp" />
+              </div>
+              <div class="row" style="padding-top: 10px;">
+                <div class="col-6">
+                  <div style="position: relative;">
+                    <div class="form-check" style="position: absolute; right: 0;">
+                      <label class="form-check-label">
+                        <input class="form-check-input" type="radio" name="answer_flag" id="answer_flag1" value="1">
+                        <span class="form-check-sign">
+                          <span class="check"></span>
+                        </span>
+                      </label>
+                    </div>
+                    <div style="background-color:rgb(255, 255, 255);">
+                      <div id="answer_title1" class="answer" data-id="" contentEditable=true data-text="Câu trả lời 1" style="padding: clamp(0.5rem, 1.2vmin, 1rem) 2rem;"></div>
+                    </div>
+                    <span  class="error invalid-feedback answer_title1_message display-hidden">Xin nhập câu trả lời</span>
+                  </div>
+                </div>
+                <div class="col-6">
+                  <div style="position: relative;">
+                    <div class="form-check" style="position: absolute; right: 0;">
+                      <label class="form-check-label">
+                        <input class="form-check-input" type="radio" name="answer_flag" id="answer_flag2" value="2">
+                        <span class="form-check-sign">
+                          <span class="check"></span>
+                        </span>
+                      </label>
+                    </div>
+                    <div style="background-color:rgb(255, 255, 255);">
+                      <div id="answer_title2" class="answer" data-id="" contentEditable=true data-text="Câu trả lời 2" style="padding: clamp(0.5rem, 1.2vmin, 1rem) 2rem;"></div>
+                    </div>
+                    <span  class="error invalid-feedback answer_title2_message display-hidden">Xin nhập câu trả lời</span>
+                  </div>
+                </div>
+              </div>
+              <div class="row" style="padding-top: 10px;">
+                <div class="col-6">
+                  <div style="position: relative;">
+                    <div class="form-check" style="position: absolute; right: 0;">
+                      <label class="form-check-label">
+                        <input class="form-check-input" type="radio" name="answer_flag" id="answer_flag3" value="3">
+                        <span class="form-check-sign">
+                          <span class="check"></span>
+                        </span>
+                      </label>
+                    </div>
+                    <div style="background-color:rgb(255, 255, 255);">
+                      <div id="answer_title3" class="answer" data-id="" contentEditable=true data-text="Câu trả lời 3" style="padding: clamp(0.5rem, 1.2vmin, 1rem) 2rem;"></div>
+                    </div>
+                    <span  class="error invalid-feedback answer_title3_message display-hidden">Xin nhập câu trả lời</span>
+                  </div>
+                </div>
+                <div class="col-6">
+                  <div style="position: relative;">
+                    <div class="form-check" style="position: absolute; right: 0;">
+                      <label class="form-check-label">
+                        <input class="form-check-input" type="radio" name="answer_flag" id="answer_flag4" value="4">
+                        <span class="form-check-sign">
+                          <span class="check"></span>
+                        </span>
+                      </label>
+                    </div>
+                    <div style="background-color:rgb(255, 255, 255);">
+                      <div id="answer_title4" class="answer" data-id="" contentEditable=true data-text="Câu trả lời 4" style="padding: clamp(0.5rem, 1.2vmin, 1rem) 2rem;"></div>
+                    </div>
+                    <span  class="error invalid-feedback answer_title4_message display-hidden">Xin nhập câu trả lời</span>
+                  </div>
+                </div>
+              </div>
+              <br>
+              <br>
+              <div style="padding-top: 20px;">
+                <label for="exampleFormControlSelect1">Giới hạn thời gian</label>
+                <select id="time_id" class="form-control selectpicker" data-style="btn btn-link" id="exampleFormControlSelect1">
+                  <% allTimer.forEach(function(item, index){ %>
+                    <option value="<%- item._id %>"><%- item.timer_sec %></option>
+                  <% }) %>
+                </select>
+              </div>
+              <div class="btnMain text-center" style="padding-top: 2rem;">
+                <button type="button" class="btn btn-success btn-lg btnAddQuestion">Thêm</button>
+                <button type="button" class="btn btn-default btn-lg btnCancelEditQuestion display-hidden">Hủy</button>
+                <button type="button" class="btn btn-success btn-lg btnFinishEditQuestion display-hidden">Sửa</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <%- include('partials/footer') -%>
+      </div>
+      <!-- Modal  -->
+      <div class="modal fade" id="setqUpdateModal" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-signup" role="document" style="max-width: 900px;">
+          <div class="modal-content">
+            <div class="card card-signup card-plain">
+              <div class="modal-header">
+                <h5 class="modal-title card-title">Thông tin bộ câu hỏi</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <i class="material-icons">clear</i>
+                </button>
+              </div>
+              <div class="modal-body">
+                <form id="formUpdateSetq" action="/api/setqs" method="post" enctype="multipart/form-data">
+                  <div class="row">
+                    <div class="col-md-6 mr-auto">
+                      <div id="messageSuccess" class="alert alert-success alert-dismissible fade show text-left" role="alert"
+                        style="display: none;">
+                        <div id="message"></div>
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                          <span aria-hidden="true">&times;</span>
+                        </button>
+                      </div>
+                      <div class="form-group">
+                        <label for="setq_title">Tên <i class="material-icons" style="color: red; font-size: 14px;">emergency</i></label>
+                        <input type="text" class="form-control" id="setq_title" name="setq_title">
+                      </div>
+                      <div class="form-group">
+                        <label for="setq_description">Mô tả</label>
+                        <textarea class="form-control" id="setq_description" name="setq_description" rows="3"></textarea>
+                      </div>
+                      <div class="form-group">
+                        <label for="setq_visibility">Giới hạn hiển thị</label>
+                        <div class="form-check form-check-radio" style="margin-left: 15px;">
+                          <label class="form-check-label">
+                            <input class="form-check-input" type="radio" name="setq_visibility" id="setq_visibility1" value="1">
+                            Only you
+                            <span class="circle">
+                              <span class="check"></span>
+                            </span>
+                          </label>
+                        </div>
+                        <div class="form-check form-check-radio" style="margin-left: 15px;">
+                          <label class="form-check-label">
+                            <input class="form-check-input" type="radio" name="setq_visibility" id="setq_visibility2" value="2">
+                            Everyone
+                            <span class="circle">
+                              <span class="check"></span>
+                            </span>
+                          </label>
+                        </div>
+                      </div>
+                      <div class="text-center">
+                        <button type="submit" class="btn btn-primary">Lưu</button>
+                      </div>
+                    </div>
+                    <div class="col-md-6 mr-auto">
+                      <div class="form-group" style="margin: 0px;">
+                        <label for="setq_image">Chọn hình </label>
+                        <div class="border-image">
+                          <!-- Show setq image -->
+                          <img class="setq_image_pic" src="" />
+                          <!-- Default Image -->
+                          <i class="fa fa-image fa-5x" id="default_image" style="margin-top: 30px; font-size: 100px;"></i>
+                        </div>
+                        <div class="p-image">
+                          <div style="border: 1px solid gray; width: 30px; border-radius: 3px;"><i
+                              class="fa fa-camera upload-button"></i>
+                          </div>
+                          <input type="file" class="file-upload" name="setq_image_temp" id="setq_image_temp" />
+                          <input type="hidden" name="setq_image" id="setq_image" />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  <%- include('partials/js') -%>
+  <script>
+      // Edit question
+      $('.btnDeleteQuestion').on('click', function () {
+        //Loading overlay show
+        $.LoadingOverlay("show");
+        // Get question_id
+        var _id = $($(this)[0].offsetParent).find('#question_id').val();
+        console.log(_id);
+
+        var question = new Object();
+        
+        question._id = _id;
+        
+        var json = JSON.stringify(question);
+        
+        $.ajax({
+          url: "/api/questions/delete",
+          type: "POST",
+          contentType: "application/json",
+          processData: false,
+          data: json,
+          success: function (result) {
+            if (result) {
+              location.reload();
+              //Loading overlay hide
+              $.LoadingOverlay("hide");
+            }
+          },
+          error: function (err) {
+            if (err.status = 501) {
+
+            }
+          }
+        });
+      });
+      // Edit question
+      $('.btnFinishEditQuestion').on('click', function () {
+        var questionTitle = $('.question_title').html($('.question_title').text()).text();
+        var answerTitle1 = $('#answer_title1').html($('#answer_title1').text()).text();
+        var answerTitle2 = $('#answer_title2').html($('#answer_title2').text()).text();
+        var answerTitle3 = $('#answer_title3').html($('#answer_title3').text()).text();
+        var answerTitle4 = $('#answer_title4').html($('#answer_title4').text()).text();
+
+        if(questionTitle == '') {
+          $('.question_title_message').removeClass('display-hidden').addClass('display-message');
+        }
+        if(answerTitle1 == '') {
+          $('.answer_title1_message').removeClass('display-hidden').addClass('display-message');
+        }
+        if(answerTitle2 == '') {
+          $('.answer_title2_message').removeClass('display-hidden').addClass('display-message');
+        }
+        if(answerTitle3 == '') {
+          $('.answer_title3_message').removeClass('display-hidden').addClass('display-message');
+        }
+        if(answerTitle4 == '') {
+          $('.answer_title4_message').removeClass('display-hidden').addClass('display-message');
+        }
+        if(questionTitle != '' && answerTitle1 != '' && answerTitle2 != '' && answerTitle3 != '' && answerTitle4 != '') {
+            //Loading overlay show
+            $.LoadingOverlay("show");
+            // Get question_id
+            var _id = $('#question_id_selected').val();
+            // Set value for array answer
+            var arrayAnswer = [];
+            $('.answer').each(function (i, obj) {
+              var arrayTemp = {};
+              var indexAnswer = i + 1;
+              if ($('input[name="answer_flag"]:checked').val() == indexAnswer) {
+                arrayAnswer.push({ _id: $(obj).attr('data-id'), answer_title: $(obj).html($(obj).text()).text(), answer_flag: true });
+              } else {
+                arrayAnswer.push({ _id: $(obj).attr('data-id'), answer_title: $(obj).html($(obj).text()).text(), answer_flag: false });
+              }
+            });  
+
+            var question = new Object();
+            question._id = _id;
+            question.question_title = $('.question_title').html($('.question_title').text()).text();
+            question.question_image = $('.question-profile-pic').attr('src');
+            question.setq_id = $('#setq_id').val();
+            question.timer_id = $('#time_id').val();
+            question.answers = arrayAnswer;
+            
+            var json = JSON.stringify(question);
+            
+            $.ajax({
+              url: "/api/questions/update",
+              type: "POST",
+              contentType: "application/json",
+              processData: false,
+              data: json,
+              success: function (result) {
+                if (result) {
+                  location.reload();
+                  //Loading overlay hide
+                  $.LoadingOverlay("hide");
+                }
+              },
+              error: function (err) {
+                if (err.status = 501) {
+
+                }
+              }
+            });
+         }
+      });
+      // Cancel edit question
+      $(".btnCancelEditQuestion").on('click', function () {
+        location.reload();
+      });
+      // Show edit question
+      $(".btnEditQuestion").on('click', function () {
+        // Scroll top page
+        const mainPanel = document.querySelector('.main-panel');
+        mainPanel.scrollTop = 0;
+        //Loading overlay show
+        $.LoadingOverlay("show");
+        // Change button
+        $('.btnAddQuestion').addClass('display-hidden');
+        $('.btnCancelEditQuestion').removeClass('display-hidden');
+        $('.btnFinishEditQuestion').removeClass('display-hidden');
+        // Selected color
+        $('.question-item').each(function(i, obj){
+          $(obj).css('background-color','rgb(234, 244, 252)');
+        });
+
+        $($(this)[0].offsetParent.offsetParent).css('background-color','rgb(156 186 210)');
+        var _id = $($(this)[0].offsetParent).find('#question_id').val();
+        // Set selected question_id
+        $('#question_id_selected').val(_id);
+
+        var formData = new FormData();
+        formData.append('_id', _id);
+
+        var object = {};
+        formData.forEach((value, key) => object[key] = value);
+        var json = JSON.stringify(object);
+
+        $.ajax({
+            url: "/question/getSingleQuestion",
+            type: "POST",
+            contentType: "application/json",
+            processData: false,
+            data: json,
+            success: function (respone) {
+                if (respone.result == 1) {
+                  $('.question_title').html('');
+                  $('.question-profile-pic').attr('src', "");
+                  $('#question_image').val('');
+                  $('#question_default_image').removeClass('display-hidden');
+                  $('#time_id').val("").change();
+                  
+                  $('.question_title').html(respone.data.question_title);
+                  $('#time_id').val(respone.data.timer_id).change();
+                  respone.allAnswer.forEach(function(item, index) {
+                    if(item.answer_flag == true){
+                      $('#answer_flag' + (index + 1)).prop('checked',true);
+                    }
+                    $('#answer_title' + (index + 1)).html(item.answer_title);
+                    $('#answer_title' + (index + 1)).attr('data-id', item._id);
+                  });
+                  if(respone.data.question_image != '') {
+                    $('.question-profile-pic').attr('src', respone.data.question_image);
+                    $('#question_image').val(respone.data.question_image);
+                    $('#question_default_image').addClass('display-hidden');
+                  }
+                  //Loading overlay hide
+                  $.LoadingOverlay("hide");
+                }
+            },
+        });
+      });
+      // Use selectpicker
+      $('.selectpicker').selectpicker();
+      // Add question 
+      $('.btnAddQuestion').on('click', function () {
+        //Loading overlay show
+        $.LoadingOverlay("show");
+
+        var questionTitle = $('.question_title').html($('.question_title').text()).text();
+        
+        var answerTitle1 = $('#answer_title1').html($('#answer_title1').text()).text();
+        var answerTitle2 = $('#answer_title2').html($('#answer_title2').text()).text();
+        var answerTitle3 = $('#answer_title3').html($('#answer_title3').text()).text();
+        var answerTitle4 = $('#answer_title4').html($('#answer_title4').text()).text();
+        
+        if(questionTitle == '') {
+          $('.question_title_message').removeClass('display-hidden').addClass('display-message');
+        }
+        if(answerTitle1 == '') {
+          $('.answer_title1_message').removeClass('display-hidden').addClass('display-message');
+        }
+        if(answerTitle2 == '') {
+          $('.answer_title2_message').removeClass('display-hidden').addClass('display-message');
+        }
+        if(answerTitle3 == '') {
+          $('.answer_title3_message').removeClass('display-hidden').addClass('display-message');
+        }
+        if(answerTitle4 == '') {
+          $('.answer_title4_message').removeClass('display-hidden').addClass('display-message');
+        }
+        if(questionTitle != '' && answerTitle1 != '' && answerTitle2 != '' && answerTitle3 != '' && answerTitle4 != '') {
+          // Set value for array answer
+          var arrayAnswer = [];
+          $('.answer').each(function (i, obj) {
+            var arrayTemp = {};
+            var indexAnswer = i + 1;
+            if ($('input[name="answer_flag"]:checked').val() == indexAnswer) {
+              arrayAnswer.push({ answer_title: $(obj).html($(obj).text()).text(), answer_flag: true });
+            } else {
+              arrayAnswer.push({ answer_title: $(obj).html($(obj).text()).text(), answer_flag: false });
+            }
+          });
+          var question = new Object();
+
+          question.question_title = $('.question_title').html($('.question_title').text()).text();
+          question.question_image = $('.question-profile-pic').attr('src');;
+          question.setq_id = $('#setq_id').val();
+          question.timer_id = $('#time_id').val();
+          question.answers = arrayAnswer;
+
+          var json = JSON.stringify(question);
+
+          $.ajax({
+            url: "/api/questions",
+            type: "POST",
+            contentType: "application/json",
+            processData: false,
+            data: json,
+            success: function (result) {
+              if (result) {
+                location.reload();
+                //Loading overlay hide
+                $.LoadingOverlay("hide");
+              }
+            },
+            error: function (err) {
+              if (err.status = 501) {
+
+              }
+            }
+          });
+        }
+      });
+      // Get data for formUpdateSetq
+      $(".setqUpdate").on('click', function () {
+        //Loading overlay hide
+        $.LoadingOverlay("show");
+        var _id = $('#setq_id').val();
+        var formData = new FormData();
+        formData.append('_id', _id);
+
+        var object = {};
+        formData.forEach((value, key) => object[key] = value);
+        var json = JSON.stringify(object);
+
+        $.ajax({
+            url: "/setq/getSingleSetq",
+            type: "POST",
+            contentType: "application/json",
+            processData: false,
+            data: json,
+            success: function (respone) {
+                if (respone.result == 1) {
+                  $('#setq_title').val(respone.data.setq_title);
+                  $('#setq_description').val(respone.data.setq_title);
+                  $('input[name="setq_visibility"][value="' + respone.data.setq_visibility + '"]').prop('checked', true);
+                  if(respone.data.setq_image != '') {
+                    $('.setq_image_pic').attr('src', respone.data.setq_image);
+                    $('#setq_image').val(respone.data.setq_image);
+                    $('#default_image').attr('class', 'display-hidden');
+                  }
+                }
+                //Loading overlay hide
+                $.LoadingOverlay("hide");
+            },
+        });
+      });
+
+      // Process add image question
+      $(".question-border-image").on('click', function () {
+        $(".question-file-upload").click();
+      });
+      $(".question-file-upload").on('change', function () {
+        $("#question_default_image").css("display", "none");
+        questionReadURL(this);
+      });
+
+      // Process image input
+      $(".upload-button").on('click', function () {
+        $(".file-upload").click();
+      });
+      $(".border-image").on('click', function () {
+        $(".file-upload").click();
+      });
+      $(".file-upload").on('change', function () {
+        $("#default_image").css("display", "none");
+        readURL(this);
+      });
+
+      // Show picture for avatar
+      var readURL = function (input) {
+        if (input.files && input.files[0]) {
+          var reader = new FileReader();
+
+          reader.onload = function (e) {
+            $('.setq_image_pic').attr('src', e.target.result);
+          }
+
+          reader.readAsDataURL(input.files[0]);
+        }
+      }
+      
+      // Show picture for question
+      var questionReadURL = function (input) {
+        if (input.files && input.files[0]) {
+          var reader = new FileReader();
+
+          reader.onload = function (e) {
+            $('.question-profile-pic').attr('src', e.target.result);
+          }
+
+          reader.readAsDataURL(input.files[0]);
+        }
+      }
+
+      // Validate form formUpdateSetq
+      $('#formUpdateSetq').validate({
+      rules: {
+        setq_title: {
+          required: true,
+        },
+      },
+      messages: {
+        setq_title: {
+          required: "Tên bộ câu hỏi bắt buộc nhập",
+        },
+      },
+      errorElement: 'span',
+      errorPlacement: function (error, element) {
+        error.addClass('invalid-feedback');
+        element.closest('.form-group').append(error);
+      },
+      highlight: function (element, errorClass, validClass) {
+        $(element).parent().addClass('label-floating has-danger');
+      },
+      unhighlight: function (element, errorClass, validClass) {
+        $(element).parent().removeClass('label-floating has-danger').addClass('label-floating has-success');
+      },
+      submitHandler: function(form) {
+        //Loading overlay show
+        $.LoadingOverlay("show");
+        var formData = new FormData($(form)[0]);
+        formData.set("setq_image", $('.setq_image_pic').attr('src'));
+        var _id = $('#setq_id').val();
+        var object = {};
+        formData.forEach((value, key) => object[key] = value);
+        var json = JSON.stringify(object);
+
+        $.ajax({
+          url: "/api/setqs/" + _id,
+          type: "PATCH",
+          contentType: "application/json",
+          processData: false,
+          data: json,
+          success: function (respone) {
+            if (respone.result) {
+              location.reload();
+              //Loading overlay hide
+              $.LoadingOverlay("hide");
+            }
+          },
+          error: function (err) {
+            if (err.status = 501) {
+
+            }
+          }
+        });
+      }
+    });
+  </script>
+</body>
+
+</html>

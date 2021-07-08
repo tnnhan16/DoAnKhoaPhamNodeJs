@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <base href="http://localhost:3030"/>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Document</title>
+        <script src="./socket.io/socket.io.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <script>
+            const socket = io("http://localhost:3030");
+            socket.on("Play", function(data){
+                $("#list").append("<h3>" + data + "</h3>")
+            });
+            socket.on("S_Sendto_C", function(data){
+            $("#list").append("<h3>" + data + "</h3>")
+        });
+        $(document).ready(function() {
+            $("#logout").click(function(){
+                var question = new Object();
+                var answers = [];
+                answers[0] = {answer_title: "dap an A", answer_flag: true};
+                answers[1] = {answer_title: "dap an B", answer_flag: false};
+                answers[2] = {answer_title: "dap an C", answer_flag: false};
+                answers[3] = {answer_title: "dap an D", answer_flag: false};
+                
+                question.question_title = "Câu 333";
+                question.setq_id = "60c07e240e1e0e035869ee8b";
+                question.timer_id = "60c99efd3328bbeb9719f7a6";
+                question.answers = answers;
+
+                let data = JSON.stringify(question);
+                console.log(data);
+                $.ajax({
+                    type: 'POST',
+                    url: "/api/questions",
+                    data: data,                   
+                    contentType: 'application/json',
+                    success: function (data) {
+                        if (data.result == 1){
+                            alert("Thêm thành công.")
+                        }
+                    },   
+                    error: function (xhr, status, error) {
+                        console.log('Error: ' + error.message);                        
+                    }
+                });
+            });
+        });
+        </script>
+    </head>
+<body>
+    <form action="./api/join" method="POST">
+        <input type="text" name="player_nickname" placeholder="Nickname">
+        <input type="number" name="setq_pin" placeholder="Pin">
+        <input type="submit" value="Join">     
+    </form>
+    <h3>Danh sach</h3>
+    <button id="logout">Test Logout</button>
+    <div id="list"></div>
+</body>
+</html>

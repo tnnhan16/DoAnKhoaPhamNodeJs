@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>
+    CQUIZE - <%- title %>
+  </title>
+  <%- include('partials/css') -%>
+</head>
+<body>
+    <div class="card ml-auto mr-auto" style="max-width: 360px; margin-top: 100px;">
+      <div class="card-header card-header-primary text-center">
+        <h4 class="card-title">Đăng ký</h4>
+      </div>
+      <div class="card-body">
+        <form id="formRegister" action="register" method="post">
+          <div id="messageSuccess" class="alert alert-success alert-dismissible fade show text-left" role="alert" style="display: none;">
+            <div id="message"></div>
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="form-group">
+            <label for="user_firstname">Họ</label>
+            <input type="text" class="form-control" id="user_firstname" name="user_firstname">
+          </div>
+          <div class="form-group">
+            <label for="user_lastname">Tên</label>
+            <input type="text" class="form-control" id="user_lastname" name="user_lastname">
+          </div>
+          <div class="form-group">
+            <label for="user_gender">Giới tính</label>
+            <div class="form-check form-check-radio" style="margin-left: 15px;">
+              <label class="form-check-label">
+                <input class="form-check-input" type="radio" name="user_gender" id="user_gender1" value="1" checked>
+                Nam
+                <span class="circle">
+                  <span class="check"></span>
+                </span>
+              </label>
+            </div>
+            <div class="form-check form-check-radio" style="margin-left: 15px;">
+              <label class="form-check-label">
+                <input class="form-check-input" type="radio" name="user_gender" id="user_gender2" value="2">
+                Nữ
+                <span class="circle">
+                  <span class="check"></span>
+                </span>
+              </label>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="user_email">Email</label>
+            <input type="text" class="form-control" id="user_email" name="user_email">
+          </div>
+          <div class="form-group">
+            <label for="user_username">Tên tài khoản <i class="material-icons" style="color: red; font-size: 14px;">emergency</i></label>
+            <input type="text" class="form-control" id="user_username" name="user_username">
+          </div>
+          <div class="form-group">
+            <label for="user_password">Mật khẩu <i class="material-icons" style="color: red; font-size: 14px;">emergency</i></label>
+            <input type="password" class="form-control" id="user_password" name="user_password">
+          </div>
+          <div class="form-group">
+            <label for="user_phone">Số điện toại</label>
+            <input type="text" class="form-control" id="user_phone" name="user_phone">
+          </div>
+          <div class="form-group">
+            <label for="user_address">Địa chỉ</label>
+            <input type="text" class="form-control" id="user_address" name="user_address">
+          </div>
+          <div class="text-center">
+            <button type="submit" class="btn btn-primary">Đăng ký</button>
+          </div>
+        </form>
+      </div>
+      <div class="card-footer">
+        <a href="/login"><i class="material-icons">arrow_back</i>Đăng nhập</a>
+      </div>
+    </div>
+  <%- include('partials/js') -%>
+  <script>
+    $('#formRegister').validate({
+      rules: {
+        user_username: {
+          required: true,
+        },
+        user_password: {
+          required: true,
+        },
+      },
+      messages: {
+        user_username: {
+          required: "Tên tài khoản bắt buộc nhập",
+        },
+        user_password: {
+          required: "Mật khẩu bắt buộc nhập",
+        },
+      },
+      errorElement: 'span',
+      errorPlacement: function (error, element) {
+        error.addClass('invalid-feedback');
+        element.closest('.form-group').append(error);
+      },
+      highlight: function (element, errorClass, validClass) {
+        $(element).parent().addClass('label-floating has-danger');
+      },
+      unhighlight: function (element, errorClass, validClass) {
+        $(element).parent().removeClass('label-floating has-danger').addClass('label-floating has-success');
+      },
+      submitHandler: function(form) {
+        var formData = new FormData($(form)[0]);
+        var object = {};
+        formData.forEach((value, key) => object[key] = value);
+        var json = JSON.stringify(object);
+        
+        var url = "/api/users";
+
+        $.ajax({
+            url: url,
+            type: "POST",
+            contentType: "application/json", // Not to set any content header
+            processData: false, // Not to process data
+            data: json,
+            success: function (result) {
+                if (result) {
+                  $("#formRegister").find(".has-success").removeClass("has-success");
+                  $(form)[0].reset();
+                  document.getElementById("message").innerHTML  = "Đăng ký thành công";
+                  document.getElementById("messageSuccess").style.display =  "block";
+                }
+            },
+            error: function (err) {
+              if(err.status = 501){
+                
+              }
+            }
+        });
+      }
+    });
+  </script>
+</body>
+
+</html>

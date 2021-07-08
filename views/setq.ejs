@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>
+    CQUIZE - <%- title %>
+  </title>
+  <%- include('partials/css') -%>
+</head>
+<body>
+    <div class="wrapper">
+      <div class="main-panel" style="float: unset; width: unset;">
+        <%- include('partials/header') -%>
+        <%- include('partials/breadcrumb') -%>
+        <div class="content">
+          <a class="btn btn-success" href="/setq/create">Tạo câu hỏi</a>
+          <div class="container-fluid">
+            <div class="row">
+              <div class="col-md-12">
+                <% data.forEach(function(item, index){ %>
+                  <div class="card">
+                    <div class="card-header">
+                      <div class="row">
+                        <div class="col-md-2">
+                          <div style="position: relative;">
+                            <div style="position: absolute; right: 0; bottom: 0; padding: 8px 16px; color: #fff; background-color: #000; font-weight: bold;">1 câu hỏi</div>
+                            <% if(item.setq_image == '' ) { %>
+                              <img class="card-img-top" src="/upload/setq/img_default.jpg" height="300" style="object-fit: cover;">
+                            <% } else { %>
+                              <img class="card-img-top" src="<%- item.setq_image %>" height="300" style="object-fit: cover;">
+                            <% } %>
+                          </div>
+                        </div>
+                        <div class="col-md-10" style=" display: flex; justify-content: space-between; flex-direction: column;">
+                            <div style="display: flex; justify-content: space-between;">
+                              <h3 class="card-title"><%- item.setq_title %></h3>
+                              <div>
+                                <input type="hidden" id="setq_id" value="<%- item._id %>">
+                                <button type="button" class="btn btn-success btnPlay">Chơi game</a>
+                              </div>
+                            </div>
+                            <div>
+                              <!-- <h3 class="card-title"><%- item.userdetails.user_username %></h3> -->
+                              <div>
+                                <a href="/setq/update/<%- item._id %>" class="btn btn-info float-left">Sửa</a>
+                                <a href="#" class="btn btn-danger float-left" onclick="deleteSetq('<%- item._id %>', '<%- item.setq_image %>')">Delete</a>
+                              </div>
+                            </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                <% }) %>
+              </div>
+            </div>
+          </div>
+        </div>
+        <%- include('partials/footer') -%>
+      </div>
+    </div>
+  <%- include('partials/js') -%>
+  <script>
+    // Play game
+    $('.btnPlay').on('click', function(){
+      var _id = $($(this)[0].offsetParent).find('#setq_id').val();
+      var formData = new FormData();
+        formData.append('_id', _id);
+
+        var object = {};
+        formData.forEach((value, key) => object[key] = value);
+        var json = JSON.stringify(object);
+
+        $.ajax({
+            url: "/api/host/" + _id,
+            type: "PATCH",
+            contentType: "application/json",
+            processData: false,
+            data: json,
+            success: function (respone) {
+              if(respone.result) {
+                window.location.href = "/play/" + respone.data.setq_pin;
+              }
+            },
+        });
+    });
+    // Delete Setq
+    function deleteSetq(_id, setqImage) {
+      var formData = new FormData();
+        formData.append('setq_image', setqImage);
+
+        var object = {};
+        formData.forEach((value, key) => object[key] = value);
+        var json = JSON.stringify(object);
+
+        $.ajax({
+            url: "/api/setqs/" + _id,
+            type: "DELETE",
+            contentType: "application/json",
+            processData: false,
+            data: json,
+            success: function (respone) {
+              window.location.href = "/setq";
+            },
+        });
+    }
+  </script>
+</body>
+
+</html>

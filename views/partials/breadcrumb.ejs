@@ -1,0 +1,16 @@
+<!-- Breadcrumb  -->
+<nav aria-label="breadcrumb" role="navigation">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a href="javascript:;">Trang chủ</a></li>
+       <% var partUrl = url.split('/');
+          if(partUrl[1] == 'setq' && partUrl[2] == null) { %>
+            <li class="breadcrumb-item"><a href="/setq">Bộ câu hỏi</a></li>
+          <% } else if(partUrl[1] == 'setq' && partUrl[2] == 'create') { %>
+            <li class="breadcrumb-item"><a href="/setq">Bộ câu hỏi</a></li>
+            <li class="breadcrumb-item"><a href="#">Tạo câu hỏi</a></li>
+          <% } else if(partUrl[1] == 'setq' && partUrl[2] == 'update') { %>
+            <li class="breadcrumb-item"><a href="/setq">Bộ câu hỏi</a></li>
+            <li class="breadcrumb-item"><a href="#">Sửa câu hỏi</a></li>
+          <% } %>
+    </ol>
+  </nav>

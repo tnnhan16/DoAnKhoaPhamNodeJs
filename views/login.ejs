@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>
+    CQUIZE - <%- title %>
+  </title>
+  <%- include('partials/css') -%>
+</head>
+<body>
+    <div class="card card-profile ml-auto mr-auto" style="max-width: 360px; margin-top: 100px;">
+      <div class="card-header card-header-primary">
+        <h4 class="card-title">Đăng nhập</h4>
+      </div>
+      <div class="card-body">
+        <div id="messageError" class="alert alert-danger alert-dismissible fade show text-left" role="alert" style="display: none;">
+          <div id="message"></div>
+          <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <form id="formLogin">
+          <div class="form-group">
+            <label for="user_username">Tên tài khoản <i class="material-icons" style="color: red; font-size: 14px;">emergency</i></label>
+            <input type="text" class="form-control" id="user_username" name="user_username">
+          </div>
+          <div class="form-group">
+            <label for="user_password">Mật khẩu <i class="material-icons" style="color: red; font-size: 14px;">emergency</i></label>
+            <input type="password" class="form-control" id="user_password" name="user_password">
+          </div>
+          <button type="submit" class="btn btn-primary">Đăng nhập</button>
+        </form>
+      </div>
+      <div class="card-footer">
+        <a href="/register"><i class="material-icons">person</i>Đăng ký</a>
+      </div>
+    </div>
+  <%- include('partials/js') -%>
+  <script>
+    $('#formLogin').validate({
+      rules: {
+        user_username: {
+          required: true,
+        },
+        user_password: {
+          required: true,
+        },
+      },
+      messages: {
+        user_username: {
+          required: "Tên tài khoản bắt buộc nhập",
+        },
+        user_password: {
+          required: "Mật khẩu bắt buộc nhập",
+        },
+      },
+      errorElement: 'span',
+      errorPlacement: function (error, element) {
+        error.addClass('invalid-feedback');
+        element.closest('.form-group').append(error);
+      },
+      highlight: function (element, errorClass, validClass) {
+        $(element).parent().addClass('label-floating has-danger');
+      },
+      unhighlight: function (element, errorClass, validClass) {
+        $(element).parent().removeClass('label-floating has-danger').addClass('label-floating has-success');
+      },
+      submitHandler: function(form) {
+        var formData = new FormData($(form)[0]);
+        var object = {};
+        formData.forEach((value, key) => object[key] = value);
+        var json = JSON.stringify(object);
+        
+        var url = "/api/login";
+
+        $.ajax({
+            url: url,
+            type: "POST",
+            contentType: "application/json", // Not to set any content header
+            processData: false, // Not to process data
+            data: json,
+            success: function (result) {
+                if (result) {
+                    window.location.href = "/setq";
+                }
+            },
+            error: function (err) {
+              if(err.status = 501){
+                document.getElementById("message").innerHTML  = err.responseJSON.message;
+                document.getElementById("messageError").style.display =  "block";
+              }
+            }
+        });
+      }
+    });
+  </script>
+</body>
+
+</html>

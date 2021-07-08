@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <base href="http://localhost:3030"/>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="./socket.io/socket.io.js"></script>
+    <script src="./js/jquery.min.js"></script>
+    <script>
+        const socket = io("http://localhost:3030");
+        socket.on("S_SendPlayerList_C", function(data){
+            console.log("List", data);
+        });
+        socket.on("PlayGame", function(data){
+            console.log("Play:", data);
+        });
+        socket.on("CountDownStart", function(data){
+            console.log("Count down start:", data);
+        });
+        socket.on("CountDownQuestion", function(data){
+            console.log("Count down question:", data);
+        });
+        $(document).ready(function() {
+            socket.emit("C_AddGroup_S", {"setq_pin":1111});
+            $("#btnTaoRoom").click(function(){
+                socket.emit("tao-room", $("#txtTaoRoom").val());
+            });
+            $("#btnChat").click(function(){
+                var txt = $("#noidungChat").val();
+                socket.emit("C_Sendto_S", txt);
+            });
+            $("#play").click(function(){
+                sockets.emit("Play", "xxx");
+            });
+        })
+    </script>
+</head>
+<body>
+    <input type="text" id="txtTaoRoom">
+    <input type="button" id="btnTaoRoom" value="Tao room">
+    <input type="text" id="noidungChat" />
+    <input type="button" id="btnChat" value="Send" />
+    <div id="list"></div>
+    <button id="play">Play</button>
+</body>
+</html>

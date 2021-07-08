@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>
+    CQUIZE - <%- title %>
+  </title>
+  <%- include('partials/css') -%>
+  <style>
+    /* setq image */
+    .profile-pic {
+        max-width: 165px;
+        max-height: 165px;
+        display: block;
+        padding: 5px;
+    }
+
+    .file-upload {
+        display: none;
+    }
+
+    .border-image {
+        overflow: hidden;
+        width: 175px;
+        height: 175px;
+        border: 1px solid gray;
+        border-radius: 10px;
+        margin-left: 70px;
+        text-align: -webkit-center;
+    }
+
+    img {
+        max-width: 100%;
+        height: auto;
+    }
+
+    .p-image {
+        color: #666666;
+        transition: all .3s cubic-bezier(.175, .885, .32, 1.275);
+        width: 175px;
+        margin-left: 70px;
+        margin-top: 5px;
+        text-align: -webkit-center;
+    }
+
+    .p-image:hover {
+        transition: all .3s cubic-bezier(.175, .885, .32, 1.275);
+    }
+
+    .upload-button {
+        font-size: 1.2em;
+    }
+
+    .upload-button:hover {
+        transition: all .3s cubic-bezier(.175, .885, .32, 1.275);
+        color: #999;
+    }
+
+    /* Question image */
+    
+    .question-border-image {
+        overflow: hidden;
+        width: 175px;
+        height: 175px;
+        border: 1px solid gray;
+        border-style: dashed;
+        border-radius: 10px;
+        text-align: -webkit-center;
+    }
+
+    .question-file-upload {
+        display: none;
+    }
+
+    .question-profile-pic {
+        max-width: 165px;
+        max-height: 165px;
+        display: block;
+        padding: 5px;
+    }
+
+    /* Question item */
+    .question-slide {
+      box-shadow: 0 1px 4px 0 rgb(0 0 0 / 14%);
+      background-color: white;
+      height: 900px;
+    }
+
+    .question-item {
+      background-color: rgb(234, 244, 252);
+      cursor: pointer;
+    }
+
+    .question-content {
+      padding-left: 10px;
+    }
+
+    /* Create question */
+    [contentEditable=true]:empty:not(:focus):before{
+        content:attr(data-text)
+    }
+  </style>
+</head>
+<body>
+    <div class="wrapper">
+      <div class="main-panel" style="float: unset; width: unset;">
+        <%- include('partials/header') -%>
+        <%- include('partials/breadcrumb') -%>
+        <div class="content" style="margin-top: 0px;">
+          <div>
+            <a class="btn btn-default float-right" href="/setq">Thoát</a>
+          </div>
+          <div class="row">
+            <div class="col-4 card">
+              <div class="card-header">
+                <div style="display: flex; justify-content: space-between;">
+                  <h4 style="padding: 15px;">Nhập tên bộ câu hỏi...</h4><button class="btn btn-info float-left" data-toggle="modal" data-target="#setqCreateModal">Cài đặt</button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row question-content">
+            <div class="col-3 question-slide">
+              <div class="card question-item" style="background-color: rgb(234, 244, 252);">
+                <div class="card-header card-header-primary">
+                  Câu hỏi 1
+                </div>
+                <div class="card-body">
+                  <div>
+                    ...
+                  </div>
+                  <div class="text-center">
+                    <button type="button" class="btn btn-success btnAddQuestion">Thêm</button>
+                    <button type="button" class="btn btn-danger btnDelete">Xóa</button>
+                  </div>
+                </div>
+              </div>
+              <div>
+
+              </div>
+            </div>
+            <div class="col-9">
+              <div style="width: 100%; background-color:rgb(255, 255, 255);">
+                <div class="question_title" contentEditable=true data-text="Nhập câu hỏi" style="padding: clamp(0.5rem, 1.2vmin, 1rem) 2rem; text-align: center;"></div>
+              </div>
+              <div style="padding-top: 10px; text-align: -webkit-center;">
+                <div class="question-border-image">
+                  <!-- Profile Image -->
+                  <img class="question-profile-pic" />
+                  <!-- Default Image -->
+                  <i class="fa fa-image fa-5x" id="question-default_image" style="margin-top: 30px; font-size: 100px;"></i>
+                </div>
+                <input type="file" class="question-file-upload" name="question_image_temp" id="question_image_temp" />
+                <input type="hidden" name="question_image" id="question_image" />
+              </div>
+              <div class="row" style="padding-top: 10px;">
+                <div class="col-6">
+                  <div style="position: relative;">
+                    <div class="form-check" style="position: absolute; right: 0;">
+                      <label class="form-check-label">
+                        <input class="form-check-input" type="checkbox" value="">
+                        <span class="form-check-sign">
+                          <span class="check"></span>
+                        </span>
+                      </label>
+                    </div>
+                    <div style="background-color:rgb(255, 255, 255);">
+                      <div contentEditable=true data-text="Câu trả lời 1" style="padding: clamp(0.5rem, 1.2vmin, 1rem) 2rem;"></div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-6">
+                  <div style="position: relative;">
+                    <div class="form-check" style="position: absolute; right: 0;">
+                      <label class="form-check-label">
+                        <input class="form-check-input" type="checkbox" value="">
+                        <span class="form-check-sign">
+                          <span class="check"></span>
+                        </span>
+                      </label>
+                    </div>
+                    <div style="background-color:rgb(255, 255, 255);">
+                      <div contentEditable=true data-text="Câu trả lời 2" style="padding: clamp(0.5rem, 1.2vmin, 1rem) 2rem;"></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="row" style="padding-top: 10px;">
+                <div class="col-6">
+                  <div style="position: relative;">
+                    <div class="form-check" style="position: absolute; right: 0;">
+                      <label class="form-check-label">
+                        <input class="form-check-input" type="checkbox" value="">
+                        <span class="form-check-sign">
+                          <span class="check"></span>
+                        </span>
+                      </label>
+                    </div>
+                    <div style="background-color:rgb(255, 255, 255);">
+                      <div contentEditable=true data-text="Câu trả lời 3" style="padding: clamp(0.5rem, 1.2vmin, 1rem) 2rem;"></div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-6">
+                  <div style="position: relative;">
+                    <div class="form-check" style="position: absolute; right: 0;">
+                      <label class="form-check-label">
+                        <input class="form-check-input" type="checkbox" value="">
+                        <span class="form-check-sign">
+                          <span class="check"></span>
+                        </span>
+                      </label>
+                    </div>
+                    <div style="background-color:rgb(255, 255, 255);">
+                      <div contentEditable=true data-text="Câu trả lời 4" style="padding: clamp(0.5rem, 1.2vmin, 1rem) 2rem;"></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <%- include('partials/footer') -%>
+      </div>
+      <!-- Modal  -->
+      <div class="modal fade" id="setqCreateModal" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-signup" role="document" style="max-width: 900px;">
+          <div class="modal-content">
+            <div class="card card-signup card-plain">
+              <div class="modal-header">
+                <h5 class="modal-title card-title">Thông tin bộ câu hỏi</h5>
+              </div>
+              <div class="modal-body">
+                <form id="formCreateSetq" action="/api/setqs" method="post" enctype="multipart/form-data">
+                  <div class="row">
+                    <div class="col-md-6 mr-auto">
+                      <div id="messageSuccess" class="alert alert-success alert-dismissible fade show text-left" role="alert"
+                        style="display: none;">
+                        <div id="message"></div>
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                          <span aria-hidden="true">&times;</span>
+                        </button>
+                      </div>
+                      <div class="form-group">
+                        <label for="setq_title">Tên <i class="material-icons" style="color: red; font-size: 14px;">emergency</i></label>
+                        <input type="text" class="form-control" id="setq_title" name="setq_title">
+                      </div>
+                      <div class="form-group">
+                        <label for="setq_description">Mô tả</label>
+                        <textarea class="form-control" id="setq_description" name="setq_description" rows="3"></textarea>
+                      </div>
+                      <div class="form-group">
+                        <label for="setq_visibility">Giới hạn hiển thị</label>
+                        <div class="form-check form-check-radio" style="margin-left: 15px;">
+                          <label class="form-check-label">
+                            <input class="form-check-input" type="radio" name="setq_visibility" id="setq_visibility1" value="1" checked>
+                            Only you
+                            <span class="circle">
+                              <span class="check"></span>
+                            </span>
+                          </label>
+                        </div>
+                        <div class="form-check form-check-radio" style="margin-left: 15px;">
+                          <label class="form-check-label">
+                            <input class="form-check-input" type="radio" name="setq_visibility" id="setq_visibility2" value="2">
+                            Everyone
+                            <span class="circle">
+                              <span class="check"></span>
+                            </span>
+                          </label>
+                        </div>
+                      </div>
+                      <div class="text-center">
+                        <a class="btn btn-default" href="/setq">Thoát</a>
+                        <button type="submit" class="btn btn-primary">Lưu</button>
+                      </div>
+                    </div>
+                    <div class="col-md-6 mr-auto">
+                      <div class="form-group" style="margin: 0px;">
+                        <label for="setq_image">Chọn hình </label>
+                        <div class="border-image">
+                          <!-- Profile Image -->
+                          <img class="profile-pic" src="" />
+                          <!-- Default Image -->
+                          <i class="fa fa-image fa-5x" id="default_image" style="margin-top: 30px; font-size: 100px;"></i>
+                        </div>
+                        <div class="p-image">
+                          <div style="border: 1px solid gray; width: 30px; border-radius: 3px;"><i
+                              class="fa fa-camera upload-button"></i>
+                          </div>
+                          <input type="file" class="file-upload" name="setq_image_temp" id="setq_image_temp" />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  <%- include('partials/js') -%>
+  <script>
+      // Show modal setq
+      $('#setqCreateModal').modal({backdrop: 'static', keyboard: false});
+      // Add question 
+      $('.btnAddQuestion').on('click', function () {
+        var formData = new FormData();
+        //Loading overlay show
+        $.LoadingOverlay("show");
+        formData.append('question_title', $('.question_title').html());
+        formData.append('question_image', $('.question_image').html());
+
+        var object = {};
+        formData.forEach((value, key) => object[key] = value);
+        var js
+        on = JSON.stringify(object);
+
+        $.ajax({
+          url: "/api/questions",
+          type: "POST",
+          contentType: "application/json",
+          processData: false,
+          data: json,
+          success: function (result) {
+            if (result) {
+              location.reload();
+              //Loading overlay hide
+              $.LoadingOverlay("hide");
+            }
+          },
+          error: function (err) {
+            if (err.status = 501) {
+
+            }
+          }
+        });
+      });
+      // Process image input
+      $(".upload-button").on('click', function () {
+        $(".file-upload").click();
+      });
+      $(".border-image").on('click', function () {
+        $(".file-upload").click();
+      });
+      $(".file-upload").on('change', function () {
+        $("#default_image").css("display", "none");
+        readURL(this);
+      });
+      // Show picture for avatar
+      var readURL = function (input) {
+        if (input.files && input.files[0]) {
+          var reader = new FileReader();
+
+          reader.onload = function (e) {
+            $('.profile-pic').attr('src', e.target.result);
+          }
+
+          reader.readAsDataURL(input.files[0]);
+        }
+      }
+      // Process add image question
+      $(".question-border-image").on('click', function () {
+        $(".question-file-upload").click();
+      });
+      $(".question-file-upload").on('change', function () {
+        $("#question-default_image").css("display", "none");
+        questionReadURL(this);
+      });
+
+      // Show picture for avatar
+      var readURL = function (input) {
+        if (input.files && input.files[0]) {
+          var reader = new FileReader();
+
+          reader.onload = function (e) {
+            $('.profile-pic').attr('src', e.target.result);
+          }
+
+          reader.readAsDataURL(input.files[0]);
+        }
+      }
+
+      // Show picture for question
+      var questionReadURL = function (input) {
+        if (input.files && input.files[0]) {
+          var reader = new FileReader();
+
+          reader.onload = function (e) {
+            $('.question-profile-pic').attr('src', e.target.result);
+          }
+
+          reader.readAsDataURL(input.files[0]);
+        }
+      }
+
+      // Validate form formCreateSetq
+      $('#formCreateSetq').validate({
+      rules: {
+        setq_title: {
+          required: true,
+        },
+      },
+      messages: {
+        setq_title: {
+          required: "Tên bộ câu hỏi bắt buộc nhập",
+        },
+      },
+      errorElement: 'span',
+      errorPlacement: function (error, element) {
+        error.addClass('invalid-feedback');
+        element.closest('.form-group').append(error);
+      },
+      highlight: function (element, errorClass, validClass) {
+        $(element).parent().addClass('label-floating has-danger');
+      },
+      unhighlight: function (element, errorClass, validClass) {
+        $(element).parent().removeClass('label-floating has-danger').addClass('label-floating has-success');
+      },
+      submitHandler: function(form) {
+        var formData = new FormData($(form)[0]);
+        //Loading overlay show
+        $.LoadingOverlay("show");
+        formData.set("setq_image", $('.profile-pic').attr('src'));
+        var object = {};
+        formData.forEach((value, key) => object[key] = value);
+        var json = JSON.stringify(object);
+
+        $.ajax({
+          url: "/api/setqs",
+          type: "POST",
+          contentType: "application/json",
+          processData: false,
+          data: json,
+          success: function (result) {
+            if (result) {
+              window.location.href = "/setq/update/" + result.data._id;
+              //Loading overlay hide
+              $.LoadingOverlay("hide");
+            }
+          },
+          error: function (err) {
+            if (err.status = 501) {
+
+            }
+          }
+        });
+      }
+    });
+  </script>
+</body>
+
+</html>
