@@ -116,6 +116,8 @@ const bottom_ques_counter = document.querySelector("footer .total_que");
 // if Next Que button clicked
 next_btn.onclick = ()=>{
     next_btn.classList.remove("show"); //hide the next button
+    document.getElementById("spinner").style.display = "block";
+    info_box.classList.remove("activeInfo");
     question = [];
     let data = JSON.stringify({"setq_pin":parseInt(setq_pin)});
     $.ajax({
@@ -143,9 +145,7 @@ next_btn.onclick = ()=>{
                         next_btn.innerHTML = "Kết thúc";
                     }
                 }
-                
                 document.getElementById("spinner").style.display = "block";
-
                 if (countDownStart==0 && question != undefined && question.answers != undefined){
                     document.getElementById("spinner").style.display = "none";
                     showQuetions(question.question, question.answers);
