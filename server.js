@@ -35,7 +35,7 @@ app.use(session({secret:"wer3432r343r3r3rwr23", resave:false, saveUninitialized:
 app.use ((req, res, next) => {
     // Website you wish to allow to connect
     
-    res.setHeader('Access-Control-Allow-Origin', 'https://itocquiz.herokuapp.com');
+    res.setHeader('Access-Control-Allow-Origin', 'https://doankhoapham.herokuapp.com');
     //res.setHeader('Access-Control-Allow-Origin', 'http://172.16.160.122:3030');
 
     // Request methods you wish to allow

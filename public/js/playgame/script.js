@@ -3,7 +3,7 @@ var question = [];
 
 //Socket.io
 
-const socket = io("https://itocquiz.herokuapp.com" + "?data=" + setq_pin);
+const socket = io("https://doankhoapham.herokuapp.com" + "?data=" + setq_pin);
 //const socket = io("http://172.16.160.122:3030" + "?data=" + setq_pin);
 
 socket.on("CountDownStart", function(data){
@@ -175,7 +175,7 @@ function showQuetions(question, answers){
     const que_text = document.querySelector(".que_text");
 
     //creating a new span and div tag for question and option and passing the value using array index
-    let que_tag = '<span>'+ (question.question_flag + 1) + ". " + question.question_title +'</span>';
+    let que_tag = '<span>'+ question.question_title +'</span>';
     let option_tag = '<div class="option"><span>'+ answers[0].answer_title +'</span></div>'
     + '<div class="option"><span>'+ answers[1].answer_title +'</span></div>'
     + '<div class="option"><span>'+ answers[2].answer_title +'</span></div>'
