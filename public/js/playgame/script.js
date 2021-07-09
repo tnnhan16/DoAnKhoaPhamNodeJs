@@ -8,7 +8,7 @@ const socket = io("https://doankhoapham.herokuapp.com" + "?data=" + setq_pin);
 
 socket.on("CountDownStart", function(data){
     console.log(data + " giây nữa bắt đầu.");
-    if (data==0 && question != undefined && question.length > 0){
+    if (data==0 && question != undefined && question.answers != undefined){
         document.getElementById("spinner").style.display = "none";
         showQuetions(question.question, question.answers);
         queCounter(question.question.question_flag + 1, question.maxQuestion);
