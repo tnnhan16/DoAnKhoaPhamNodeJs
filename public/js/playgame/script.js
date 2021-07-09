@@ -137,9 +137,11 @@ next_btn.onclick = ()=>{
                 if(data.question.question_flag + 1 <= data.maxQuestion){
                     timeText.textContent = "Thời gian:"; //change the timeText to Time Left
                     next_btn.classList.remove("show"); //hide the next button
-                }else{
-                    next_btn.innerHTML = "Kết thúc"
+                    if (data.question.question_flag + 1 == data.maxQuestion){
+                        next_btn.innerHTML = "Kết thúc";
+                    }
                 }
+                
                 document.getElementById("spinner").style.display = "block";
 
                 if (countDownStart==0 && question != undefined && question.answers != undefined){
@@ -150,6 +152,7 @@ next_btn.onclick = ()=>{
                 }
             }
             else{
+               
                 console.log("kết quả", data.data);
                 showResult(); //calling showResult function
             }
