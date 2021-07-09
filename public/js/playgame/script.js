@@ -151,8 +151,6 @@ next_btn.onclick = ()=>{
                     next_btn.classList.remove("show"); //hide the next button
                     if (data.question.question_flag + 1 == data.maxQuestion){
                         next_btn.innerHTML = "Kết thúc";
-                        document.getElementById("spinner").style.display = "none";
-                        quiz_box.classList.add("activeQuiz");
                     }
                 }
                 if (countDownStart==0 && question != undefined && question.answers != undefined){
