@@ -7,7 +7,6 @@ import {getListResultQuestionNumber, getListResultEnd} from "./ResultQuestionNum
 
 var nextNumberQuestion = 0;
 export function playGame(req, res){
-    console.log(req.body);
     getFullDataOfQuestion(req.body.setq_pin, nextNumberQuestion)
     .then((data)=> {
         if (data.question != undefined){
@@ -17,7 +16,6 @@ export function playGame(req, res){
             var downloadTimer = setInterval(function(){
                 if(timeleft < 0){
                     clearInterval(downloadTimer);
-                    console.log("Playgame Pin", req.body.setq_pin);
                     io.sockets.in(Number(req.body.setq_pin)).emit("PlayGame", [data.question,data.answers, data.maxQuestion]);
                     var timerOfQuestion = data.timer.timer_sec;
                     var downloadTimer2 = setInterval(function(){
@@ -30,10 +28,8 @@ export function playGame(req, res){
                         }
                         timerOfQuestion -= 1;
                     }, 1000);
-                } else {
-                    
+                } else {       
                     io.sockets.in(Number(req.body.setq_pin)).emit("CountDownStart", timeleft);
-                    console.log("CountDownStart", timeleft);
                 }
                 timeleft -= 1;
             }, 1000);

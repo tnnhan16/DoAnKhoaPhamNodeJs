@@ -62,8 +62,6 @@ continue_btn.onclick = ()=>{
         data: data,                   
         contentType: 'application/json',
         success: function (data) {
-            info_box.classList.remove("activeInfo");
-            document.getElementById("spinner").style.display = "block";
             if (data.result == 1){
                 console.log(data);
                 question.question = data.question;
@@ -74,7 +72,9 @@ continue_btn.onclick = ()=>{
                         question.corrAnswer = element;
                         return;
                     }
-                });     
+                });
+                info_box.classList.remove("activeInfo");
+                document.getElementById("spinner").style.display = "block";
             }
         },   
         error: function (xhr, status, error) {
