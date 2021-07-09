@@ -5,7 +5,7 @@ export const createResult = async(data) => {
         const player = await getNickName(data.player_id);
         var point = 0;
         if (data.answer_flag == true){
-            point = data.point*10
+            point = 10;//data.point*10
         }
         console.log("Diem", point);
         const result = new ResultQuestionNumber({
