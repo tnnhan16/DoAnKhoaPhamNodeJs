@@ -10,7 +10,7 @@ export function playGame(req, res){
     console.log(req.body);
     getFullDataOfQuestion(req.body.setq_pin, nextNumberQuestion)
     .then((data)=> {
-        if (data.question!=undefined){
+        if (data.question != undefined){
             console.log("Data: ", data);
             nextNumberQuestion = data.question.question_flag + 1;
             var timeleft = 3;
