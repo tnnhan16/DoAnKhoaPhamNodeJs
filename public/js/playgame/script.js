@@ -8,7 +8,7 @@ const socket = io("https://doankhoapham.herokuapp.com" + "?data=" + setq_pin);
 
 socket.on("CountDownStart", function(data){
     console.log(data + " giây nữa bắt đầu.");
-    if (data==0 && question != undefined){
+    if (data==0 && question != undefined && question.length > 0){
         document.getElementById("spinner").style.display = "none";
         showQuetions(question.question, question.answers);
         queCounter(question.question.question_flag + 1, question.maxQuestion);
@@ -104,6 +104,7 @@ const bottom_ques_counter = document.querySelector("footer .total_que");
 
 // if Next Que button clicked
 next_btn.onclick = ()=>{
+    next_btn.classList.remove("show"); //hide the next button
     question = [];
     let data = JSON.stringify({"setq_pin":parseInt(setq_pin)});
     $.ajax({
