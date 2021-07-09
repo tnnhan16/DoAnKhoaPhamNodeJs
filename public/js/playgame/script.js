@@ -1,6 +1,6 @@
 //Insert question and answers into array
 var question = [];
-var countDownStart = 3;
+var countDownStart = 5;
 //Socket.io
 
 const socket = io("https://doankhoapham.herokuapp.com" + "?data=" + setq_pin);
