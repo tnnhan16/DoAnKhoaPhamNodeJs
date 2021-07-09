@@ -76,6 +76,13 @@ continue_btn.onclick = ()=>{
                 });
                 info_box.classList.remove("activeInfo");
                 document.getElementById("spinner").style.display = "block";
+
+                if (question != undefined && question.answers != undefined){
+                    document.getElementById("spinner").style.display = "none";
+                    showQuetions(question.question, question.answers);
+                    queCounter(question.question.question_flag + 1, question.maxQuestion);
+                    quiz_box.classList.add("activeQuiz");            
+                }
             }
         },   
         error: function (xhr, status, error) {
@@ -133,6 +140,13 @@ next_btn.onclick = ()=>{
                     next_btn.innerHTML = "Kết thúc"
                 }
                 document.getElementById("spinner").style.display = "block";
+
+                if (question != undefined && question.answers != undefined){
+                    document.getElementById("spinner").style.display = "none";
+                    showQuetions(question.question, question.answers);
+                    queCounter(question.question.question_flag + 1, question.maxQuestion);
+                    quiz_box.classList.add("activeQuiz");            
+                }
             }
             else{
                 console.log("kết quả", data.data);
