@@ -10,6 +10,7 @@ socket.on("CountDownStart", function(data){
     console.log(data + " giây nữa bắt đầu.");
     document.getElementById("spinner").style.display = "block";
     info_box.classList.remove("activeInfo");
+    quiz_box.classList.remove("activeQuiz");
     countDownStart = data;
     if (countDownStart==0 && question != undefined && question.answers != undefined){
         document.getElementById("spinner").style.display = "none";
@@ -60,6 +61,7 @@ continue_btn.onclick = ()=>{
     $('button.restart, button.quit').css({"display":"none"});
     document.getElementById("spinner").style.display = "block";
     info_box.classList.remove("activeInfo");
+    quiz_box.classList.remove("activeQuiz");
     question = [];
     let data = JSON.stringify({"setq_pin":parseInt(setq_pin)});
     $.ajax({
@@ -118,6 +120,7 @@ next_btn.onclick = ()=>{
     next_btn.classList.remove("show"); //hide the next button
     document.getElementById("spinner").style.display = "block";
     info_box.classList.remove("activeInfo");
+    quiz_box.classList.remove("activeQuiz");
     question = [];
     let data = JSON.stringify({"setq_pin":parseInt(setq_pin)});
     $.ajax({
