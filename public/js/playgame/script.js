@@ -1,6 +1,7 @@
 //Insert question and answers into array
+var number = 3;
 var question = [];
-var countDownStart = 3;
+var countDownStart = number;
 var currentNumberQuestion = 0;
 var maxNumberQuestion = 2;
 //Socket.io
@@ -60,6 +61,7 @@ exit_btn.onclick = ()=>{
 
 // if continueQuiz button clicked
 continue_btn.onclick = ()=>{
+    countDownStart = number;
     $('button.restart, button.quit').css({"display":"none"});
     document.getElementById("spinner").style.display = "block";
     info_box.classList.remove("activeInfo");
@@ -120,6 +122,7 @@ const bottom_ques_counter = document.querySelector("footer .total_que");
 
 // if Next Que button clicked
 next_btn.onclick = ()=>{
+    countDownStart = number;
     next_btn.classList.remove("show"); //hide the next button
     if (currentNumberQuestion + 1 < maxNumberQuestion){
         document.getElementById("spinner").style.display = "block";
