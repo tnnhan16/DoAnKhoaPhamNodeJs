@@ -1,6 +1,8 @@
 //Insert question and answers into array
 var question = [];
-var countDownStart = 5;
+var countDownStart = 3;
+var currentNumberQuestion = 0;
+var maxNumberQuestion = 2;
 //Socket.io
 
 const socket = io("https://doankhoapham.herokuapp.com" + "?data=" + setq_pin);
@@ -75,6 +77,7 @@ continue_btn.onclick = ()=>{
                 question.question = data.question;
                 question.answers = data.answers;
                 question.maxQuestion = data.maxQuestion;
+                maxNumberQuestion = data.maxQuestion;
                 data.answers.forEach(element => {
                     if (element.answer_flag == true){
                         question.corrAnswer = element;
@@ -118,9 +121,11 @@ const bottom_ques_counter = document.querySelector("footer .total_que");
 // if Next Que button clicked
 next_btn.onclick = ()=>{
     next_btn.classList.remove("show"); //hide the next button
-    document.getElementById("spinner").style.display = "block";
-    info_box.classList.remove("activeInfo");
-    quiz_box.classList.remove("activeQuiz");
+    if (currentNumberQuestion + 1 < maxNumberQuestion){
+        document.getElementById("spinner").style.display = "block";
+        info_box.classList.remove("activeInfo");
+        quiz_box.classList.remove("activeQuiz");
+    }
     question = [];
     let data = JSON.stringify({"setq_pin":parseInt(setq_pin)});
     $.ajax({
@@ -130,6 +135,17 @@ next_btn.onclick = ()=>{
         contentType: 'application/json',
         success: function (data) {
             if (data.result == 1){
+                question.question = data.question;
+                question.answers = data.answers;
+                question.maxQuestion = data.maxQuestion;
+                maxNumberQuestion = data.maxQuestion;
+                currentNumberQuestion = data.question.question_flag + 1;
+                data.answers.forEach(element => {
+                    if (element.answer_flag == true){
+                        question.corrAnswer = element;
+                        return;
+                    }
+                });
                 if(data.question.question_flag + 1 <= data.maxQuestion){
                     timeText.textContent = "Thời gian:"; //change the timeText to Time Left
                     next_btn.classList.remove("show"); //hide the next button
@@ -139,15 +155,6 @@ next_btn.onclick = ()=>{
                         quiz_box.classList.add("activeQuiz");
                     }
                 }
-                question.question = data.question;
-                question.answers = data.answers;
-                question.maxQuestion = data.maxQuestion;
-                data.answers.forEach(element => {
-                    if (element.answer_flag == true){
-                        question.corrAnswer = element;
-                        return;
-                    }
-                });
                 if (countDownStart==0 && question != undefined && question.answers != undefined){
                     document.getElementById("spinner").style.display = "none";
                     showQuetions(question.question, question.answers);
