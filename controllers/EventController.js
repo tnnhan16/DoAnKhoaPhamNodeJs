@@ -12,7 +12,7 @@ export function playGame(req, res){
         if (data.question != undefined){
             console.log("Data: ", data);
             nextNumberQuestion = data.question.question_flag + 1;
-            var timeleft = 3;
+            var timeleft = 5;
             var downloadTimer = setInterval(function(){
                 if(timeleft < 0){
                     clearInterval(downloadTimer);

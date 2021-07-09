@@ -1,5 +1,5 @@
 //Insert question and answers into array
-var number = 3;
+var number = 5;
 var question = [];
 var countDownStart = number;
 var currentNumberQuestion = 0;
