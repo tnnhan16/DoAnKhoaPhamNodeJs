@@ -54,7 +54,7 @@ exit_btn.onclick = ()=>{
 
 // if continueQuiz button clicked
 continue_btn.onclick = ()=>{
-    $('button.restart').css({"display":"none"});
+    $('button.restart, button.quit').css({"display":"none"});
     question = [];
     let data = JSON.stringify({"setq_pin":parseInt(setq_pin)});
     $.ajax({
@@ -192,7 +192,7 @@ function startTimer(time){
             option_list.children[i].classList.add("disabled"); //once user select an option then disabled all options
         }
         next_btn.classList.add("show"); //show the next button if user selected any option
-        $('button.restart').css({"display":"block"});
+        $('button.restart, button.quit').css({"display":"block"});
     }
 }
 
