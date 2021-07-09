@@ -8,6 +8,8 @@ const socket = io("https://doankhoapham.herokuapp.com" + "?data=" + setq_pin);
 
 socket.on("CountDownStart", function(data){
     console.log(data + " giây nữa bắt đầu.");
+    document.getElementById("spinner").style.display = "block";
+    info_box.classList.remove("activeInfo");
     countDownStart = data;
     if (countDownStart==0 && question != undefined && question.answers != undefined){
         document.getElementById("spinner").style.display = "none";
@@ -56,6 +58,8 @@ exit_btn.onclick = ()=>{
 // if continueQuiz button clicked
 continue_btn.onclick = ()=>{
     $('button.restart, button.quit').css({"display":"none"});
+    document.getElementById("spinner").style.display = "block";
+    info_box.classList.remove("activeInfo");
     question = [];
     let data = JSON.stringify({"setq_pin":parseInt(setq_pin)});
     $.ajax({
@@ -75,8 +79,6 @@ continue_btn.onclick = ()=>{
                         return;
                     }
                 });
-                info_box.classList.remove("activeInfo");
-                document.getElementById("spinner").style.display = "block";
 
                 if (countDownStart==0 && question != undefined && question.answers != undefined){
                     document.getElementById("spinner").style.display = "none";

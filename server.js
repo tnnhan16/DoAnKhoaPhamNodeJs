@@ -84,20 +84,6 @@ io.on("connection", function(socket){
     });
     //Thêm user vào nhóm
     socket.on("C_AddGroup_S", function(data){
-        
-        // const clients = io.sockets.adapter.rooms.get(data.setq_pin);
-        // const countPlayer = clients ? clients.size : 0;
-        // console.log("Số người chơi đã vào room: ", countPlayer);
-        // countMaxPlayer(data.setq_pin).then((data) => {
-        //     console.log("Người chơi join vào phòng: ", data.setq_pin);
-        //     console.log("Số người chơi tối đa trong phòng: ", data);
-        //     if(countPlayer<data){
-        //         console.log("Cho phép vô!");
-        //     }
-        //     else {
-        //         console.log("Đi chỗ khác chơi");
-        //     }
-        // });
         socket.join(parseInt(data.setq_pin));
         socket.phong = parseInt(data.setq_pin);
         //Lấy danh sách user của nhóm
@@ -112,37 +98,20 @@ io.on("connection", function(socket){
     });
     
     socket.on("ResultQuestionNumber", function(data){
-      
-
-        //await new Promise(resolve => socket.emit("S_SendResultQuestionNumber_C", list));
         createResult(data)
         .then((newResult)=> {
             getListResultQuestionNumber(data.question_id, data.setq_id)
             .then((list) => {
                 socket.emit("S_SendResultQuestionNumber_C", list);
                 socket.broadcast.to(socket.phong).emit("S_SendResultQuestionNumberBroadCast_C", list);
-                //io.sockets.in(socket.phong).emit("S_SendResultQuestionNumber_C", list);
             })
         });
         
     });
-
-    //Nhấn show kết quả sau khi chơi 1 câu hỏi
-    // socket.on("HostShowResult", function(data){
-    //     // getListResultQuestionNumber(data.question_id, data.setq_id)
-    //     // .then((data) => {
-    //     //     io.sockets.in(socket.phong).emit("S_SendResultQuestionNumber_C", data);
-    //     // })
-        
-    // });
 });
-
 
 app.get("/play/:_id", function(req, res){
     res.render("play", {pin: req.params._id});
 });
-
-
-
 
 export default io;
