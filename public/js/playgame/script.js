@@ -1,6 +1,6 @@
 //Insert question and answers into array
 var question = [];
-
+var countDownStart = 3;
 //Socket.io
 
 const socket = io("https://doankhoapham.herokuapp.com" + "?data=" + setq_pin);
@@ -8,7 +8,8 @@ const socket = io("https://doankhoapham.herokuapp.com" + "?data=" + setq_pin);
 
 socket.on("CountDownStart", function(data){
     console.log(data + " giây nữa bắt đầu.");
-    if (data==0 && question != undefined && question.answers != undefined){
+    countDownStart = data;
+    if (countDownStart==0 && question != undefined && question.answers != undefined){
         document.getElementById("spinner").style.display = "none";
         showQuetions(question.question, question.answers);
         queCounter(question.question.question_flag + 1, question.maxQuestion);
@@ -77,7 +78,7 @@ continue_btn.onclick = ()=>{
                 info_box.classList.remove("activeInfo");
                 document.getElementById("spinner").style.display = "block";
 
-                if (question != undefined && question.answers != undefined){
+                if (countDownStart==0 && question != undefined && question.answers != undefined){
                     document.getElementById("spinner").style.display = "none";
                     showQuetions(question.question, question.answers);
                     queCounter(question.question.question_flag + 1, question.maxQuestion);
@@ -141,7 +142,7 @@ next_btn.onclick = ()=>{
                 }
                 document.getElementById("spinner").style.display = "block";
 
-                if (question != undefined && question.answers != undefined){
+                if (countDownStart==0 && question != undefined && question.answers != undefined){
                     document.getElementById("spinner").style.display = "none";
                     showQuetions(question.question, question.answers);
                     queCounter(question.question.question_flag + 1, question.maxQuestion);
