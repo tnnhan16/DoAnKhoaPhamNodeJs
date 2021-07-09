@@ -129,9 +129,16 @@ next_btn.onclick = ()=>{
         data: data,                   
         contentType: 'application/json',
         success: function (data) {
-            info_box.classList.remove("activeInfo");
-            quiz_box.classList.remove("activeQuiz");
             if (data.result == 1){
+                if(data.question.question_flag + 1 <= data.maxQuestion){
+                    timeText.textContent = "Thời gian:"; //change the timeText to Time Left
+                    next_btn.classList.remove("show"); //hide the next button
+                    if (data.question.question_flag + 1 == data.maxQuestion){
+                        next_btn.innerHTML = "Kết thúc";
+                        document.getElementById("spinner").style.display = "none";
+                        quiz_box.classList.add("activeQuiz");
+                    }
+                }
                 question.question = data.question;
                 question.answers = data.answers;
                 question.maxQuestion = data.maxQuestion;
@@ -141,14 +148,6 @@ next_btn.onclick = ()=>{
                         return;
                     }
                 });
-                if(data.question.question_flag + 1 <= data.maxQuestion){
-                    timeText.textContent = "Thời gian:"; //change the timeText to Time Left
-                    next_btn.classList.remove("show"); //hide the next button
-                    if (data.question.question_flag + 1 == data.maxQuestion){
-                        next_btn.innerHTML = "Kết thúc";
-                    }
-                }
-                document.getElementById("spinner").style.display = "block";
                 if (countDownStart==0 && question != undefined && question.answers != undefined){
                     document.getElementById("spinner").style.display = "none";
                     showQuetions(question.question, question.answers);
