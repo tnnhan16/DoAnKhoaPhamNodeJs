@@ -172,23 +172,18 @@ next_btn.onclick = ()=>{
 
 // getting questions and options from array
 function showQuetions(question, answers){
-    const que_text = document.querySelector(".que_text");
-
-    //creating a new span and div tag for question and option and passing the value using array index
-    let que_tag = '<span>'+ question.question_title +'</span>';
-    let option_tag = '<div class="option"><span>'+ answers[0].answer_title +'</span></div>'
-    + '<div class="option"><span>'+ answers[1].answer_title +'</span></div>'
-    + '<div class="option"><span>'+ answers[2].answer_title +'</span></div>'
-    + '<div class="option"><span>'+ answers[3].answer_title +'</span></div>';
-    que_text.innerHTML = que_tag; //adding new span tag inside que_tag
-    option_list.innerHTML = option_tag; //adding new div tag inside option_tag
-    
-    const option = option_list.querySelectorAll(".option");
-
-    // set onclick attribute to all available options
-    // for(i=0; i < option.length; i++){
-    //     option[i].setAttribute("onclick", "optionSelected(this)");
-    // }
+    if(question != undefined && answers != undefined){
+        const que_text = document.querySelector(".que_text");
+        //creating a new span and div tag for question and option and passing the value using array index
+        let que_tag = '<span>'+ question.question_title +'</span>';
+        let option_tag = '<div class="option"><span>'+ answers[0].answer_title +'</span></div>'
+        + '<div class="option"><span>'+ answers[1].answer_title +'</span></div>'
+        + '<div class="option"><span>'+ answers[2].answer_title +'</span></div>'
+        + '<div class="option"><span>'+ answers[3].answer_title +'</span></div>';
+        que_text.innerHTML = que_tag; //adding new span tag inside que_tag
+        option_list.innerHTML = option_tag; //adding new div tag inside option_tag
+        const option = option_list.querySelectorAll(".option");
+    }
 }
 // creating the new div tags which for icons
 let tickIconTag = '<div class="icon tick"><i class="fas fa-check"></i></div>';
