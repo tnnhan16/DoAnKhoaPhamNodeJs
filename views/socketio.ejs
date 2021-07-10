@@ -11,16 +11,14 @@
     <script>
         const socket = io("http://localhost:3030");
         socket.on("S_SendPlayerList_C", function(data){
-            console.log("List", data);
         });
         socket.on("PlayGame", function(data){
-            console.log("Play:", data);
+
         });
         socket.on("CountDownStart", function(data){
-            console.log("Count down start:", data);
+
         });
         socket.on("CountDownQuestion", function(data){
-            console.log("Count down question:", data);
         });
         $(document).ready(function() {
             socket.emit("C_AddGroup_S", {"setq_pin":1111});

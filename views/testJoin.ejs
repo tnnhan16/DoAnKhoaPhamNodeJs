@@ -31,7 +31,6 @@
                 question.answers = answers;
 
                 let data = JSON.stringify(question);
-                console.log(data);
                 $.ajax({
                     type: 'POST',
                     url: "/api/questions",

@@ -4,8 +4,6 @@ import User from "../models/UserModel.js";
 import bcrypt from "bcryptjs";
 
 export function createUser(req, res){
-    console.log("Post register");
-    console.log(req.body);
     User.find({"$or": [{"user_username":req.body.user_username}, {"user_email":req.body.user_email}]}, function(err, data){
         if(data.length==0){
             bcrypt.genSalt(10, function(err, salt) {

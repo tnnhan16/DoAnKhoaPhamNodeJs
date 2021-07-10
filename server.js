@@ -35,8 +35,8 @@ app.use(session({secret:"wer3432r343r3r3rwr23", resave:false, saveUninitialized:
 app.use ((req, res, next) => {
     // Website you wish to allow to connect
     
-    res.setHeader('Access-Control-Allow-Origin', 'https://doankhoapham.herokuapp.com');
-    //res.setHeader('Access-Control-Allow-Origin', 'http://172.16.160.122:3030');
+    // res.setHeader('Access-Control-Allow-Origin', 'https://doankhoapham.herokuapp.com');
+    res.setHeader('Access-Control-Allow-Origin', 'http://192.168.233.1:3030');
 
     // Request methods you wish to allow
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
@@ -73,24 +73,27 @@ app.use("/", [loginPageRoutes, setqPageRoutes, questionPageRoutes]);
 app.get("/testSocKet", function(req, res){
     res.render("socketio");
 });
-
+var maphong = "";
 io.on("connection", function(socket){
-    console.log("New Id " + socket.id);
-    var data = socket.handshake.query.data;
-    socket.join(parseInt(data));
-    socket.phong = parseInt(data);
+    maphong = socket.handshake.query.data;
+    if (maphong != undefined) {
+        console.log("New Id: " + socket.id);
+        socket.join(parseInt(maphong));
+        socket.phong = parseInt(maphong);
+        console.log("Mã phòng join: " + maphong);
+    }
     socket.on("disconnect", function(){
         console.log("User disconnected");
     });
     //Thêm user vào nhóm
     socket.on("C_AddGroup_S", function(data){
         socket.join(parseInt(data.setq_pin));
-        socket.phong = parseInt(data.setq_pin);
+        socket.phong = parseInt(data.setq_pin); 
         //Lấy danh sách user của nhóm
-        console.log("Playgame Pin1", data.setq_pin);
         const list = getListPlayerByPin(data.setq_pin)
         .then((dataPlayer) => {
-            io.sockets.in(socket.phong).emit("S_SendPlayerList_C", dataPlayer);
+            console.log("Gửi danh sách người chơi vào phòng có mã: ", data.setq_pin);
+            io.sockets.in(parseInt(data.setq_pin)).emit("S_SendPlayerList_C", dataPlayer);
         })
         .catch((err) => {
             console.log(err);
@@ -102,11 +105,12 @@ io.on("connection", function(socket){
         .then((newResult)=> {
             getListResultQuestionNumber(data.question_id, data.setq_id)
             .then((list) => {
+                console.log("Người dùng trả lời câu hỏi số: ",data.question_id);
                 socket.emit("S_SendResultQuestionNumber_C", list);
-                socket.broadcast.to(socket.phong).emit("S_SendResultQuestionNumberBroadCast_C", list);
+                console.log("Mã phòng: ", parseInt(data.setq_pin));
+                socket.broadcast.to(parseInt(data.setq_pin)).emit("S_SendResultQuestionNumberBroadCast_C", list);
             })
-        });
-        
+        });   
     });
 });
 

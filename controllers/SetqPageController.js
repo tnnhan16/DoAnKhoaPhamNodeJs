@@ -21,29 +21,7 @@ export function setqPage(req, res){
                 $expr: { $eq: [ "$setq_created_by", new ObjectId(req.session.user_id) ]  },
             }},
             { $unwind: "$userdetails"},
-            // {
-            //     $lookup: {
-            //         from: "questions",
-            //         localField: "setq_id",
-            //         foreignField: "_id",
-            //         as: "questiondetails"
-            //     }
-            // },
-            // { $unwind: "$questiondetails"},
-            // {
-            //     "$group": {
-            //         "_id": "$questiondetails._id",
-            //         "count": { "$sum": 1 }
-            //     }
-            // },
-            // {
-            //     "$group": {
-            //         "_id": null,
-            //         "total": { "$sum": "$count" }
-            //     }
-            // }
         ]).then((allSetq) => {
-            console.log(allSetq);
             res.render("setq", {title: "Bộ câu hỏi", data: allSetq});
         })
         .catch((err) => {

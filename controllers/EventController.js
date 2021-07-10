@@ -10,9 +10,8 @@ export function playGame(req, res){
     getFullDataOfQuestion(req.body.setq_pin, nextNumberQuestion)
     .then((data)=> {
         if (data.question != undefined){
-            console.log("Data: ", data);
             nextNumberQuestion = data.question.question_flag + 1;
-            var timeleft = 5;
+            var timeleft = 3;
             var downloadTimer = setInterval(function(){
                 if(timeleft < 0){
                     clearInterval(downloadTimer);
@@ -21,14 +20,19 @@ export function playGame(req, res){
                     var downloadTimer2 = setInterval(function(){
                         if(timerOfQuestion < 0){
                             clearInterval(downloadTimer2);
-                            io.sockets.in(Number(req.body.setq_pin)).emit("FinishQuestionNumber", "Thời gian câu hỏi số " + parseInt(data.question.question_flag + 1) + " đã hết.");
+                            console.log("Mã phòng: ",req.body.setq_pin)
+                            console.log("Thời gian câu hỏi số " + Number(data.question.question_flag + 1) +" đã hết giờ.");
+                            io.sockets.in(req.body.setq_pin).emit("FinishQuestionNumber", "Thời gian câu hỏi số " + parseInt(data.question.question_flag + 1) + " đã hết.");
                         } else {
+                            console.log("Mã phòng: ",req.body.setq_pin)
                             io.sockets.in(Number(req.body.setq_pin)).emit("CountDownQuestion", timerOfQuestion);
-                            console.log("CountDownQuestion", timerOfQuestion);
+                            console.log("Thời gian câu hỏi số " + Number(data.question.question_flag + 1) +" sắp hết giờ:", timerOfQuestion);
                         }
                         timerOfQuestion -= 1;
                     }, 1000);
-                } else {       
+                } else { 
+                    console.log("Còn" + timeleft + "nữa bắt đầu.");
+                    console.log("Mã phòng: ",req.body.setq_pin) 
                     io.sockets.in(Number(req.body.setq_pin)).emit("CountDownStart", timeleft);
                 }
                 timeleft -= 1;
@@ -46,6 +50,8 @@ export function playGame(req, res){
             getSetqWithPin(req.body.setq_pin).then((setq) => {
                 Setq.findOneAndUpdate({_id: setq._id },{$set: {setq_playing:0}}, {new: true }).exec();
                 getListResultEnd(setq._id).then((list) => {
+                    console.log("Hoàn thành trò chơi.Gửi danh danh sách kết quả cuối cùng.");
+                    console.log("Mã phòng: ",req.body.setq_pin) 
                     io.sockets.in(Number(req.body.setq_pin)).emit("SendResultEnd", list);
                     res.json({
                         result: 0,
@@ -54,11 +60,8 @@ export function playGame(req, res){
                 });
             })
             
-        }
-            
-          
-    });
-            
+        }      
+    });          
 }
 
 export function showPoint(req, res){
@@ -81,7 +84,6 @@ export function showPoint(req, res){
 }
 
 export function hostGame(req, res){
-    //console.log(req.body);
     makePin(4).then((pin)=> {
         req.body.setq_pin = pin;
         const updateObject = req.body;

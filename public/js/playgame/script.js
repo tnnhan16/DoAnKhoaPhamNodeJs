@@ -1,13 +1,13 @@
 //Insert question and answers into array
-var number = 5;
+var number = 3;
 var question = [];
 var countDownStart = number;
 var currentNumberQuestion = 0;
 var maxNumberQuestion = 2;
 //Socket.io
 
-const socket = io("https://doankhoapham.herokuapp.com" + "?data=" + setq_pin);
-//const socket = io("http://172.16.160.122:3030" + "?data=" + setq_pin);
+// const socket = io("https://doankhoapham.herokuapp.com" + "?data=" + setq_pin);
+const socket = io("http://192.168.233.1:3030" + "?data=" + setq_pin);
 
 socket.on("CountDownStart", function(data){
     console.log(data + " giây nữa bắt đầu.");
@@ -75,7 +75,6 @@ continue_btn.onclick = ()=>{
         contentType: 'application/json',
         success: function (data) {
             if (data.result == 1){
-                console.log(data);
                 question.question = data.question;
                 question.answers = data.answers;
                 question.maxQuestion = data.maxQuestion;
@@ -164,8 +163,6 @@ next_btn.onclick = ()=>{
                 }
             }
             else{
-               
-                console.log("kết quả", data.data);
                 showResult(); //calling showResult function
             }
         },   
